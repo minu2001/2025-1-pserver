@@ -1,28 +1,43 @@
-# 2025.3.10.
-# 프로젝트2 붓꽃분류기 만들기
-# 이용희 교수님과 열심히 만들어보자.
 
-
+import joblib
 import pandas as pd
-import numpy as np
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
+import numpy as np
+
 
 iris_df = pd.read_csv('iris.csv')
 
+# training
+print(iris_df)
+
+X = iris_df.drop('species', axis=1)
 y = iris_df['species']
-X = iris_df.drop('species',axis=1)
+print(X, y)
+
+rfc = RandomForestClassifier()
+model_rfc = rfc.fit(X, y)
 
 kn = KNeighborsClassifier()
-model_kn = kn.fit(X,y)
+model_kn = kn.fit(X, y)
 
-#X_new = pd.DataFrame([[3, 3, 3, 3]], columns=X.columns)
-#X_new = np.array([[5.0,3.4,1.4,0.2]])
+#모델 저장 및 활용
+joblib.dump(model_rfc, 'model_rfc.pkl')
+joblib.dump(model_kn, 'model_kn.pkl')
 
+model_rfc = joblib.load('model_rfc.pkl')
+model_kn = joblib.load('model_kn.pkl')
 
-X_new = pd.DataFrame([[1.0,4.2,1.4,7.0]], columns=X.columns)
+# 예측
 
+X_new = np.array([[1, 4.2, 1.4, 7]])
+
+prediction = model_rfc.predict(X_new)
+print(f'RFC prediction={prediction}')
+probability = model_rfc.predict_proba(X_new)
+print(f'RFC prob={probability}')
 
 prediction = model_kn.predict(X_new)
-print(prediction)
+print(f'KN prediction={prediction}')
 probability = model_kn.predict_proba(X_new)
-print(probability)
+print(f'KN prob={probability}')
