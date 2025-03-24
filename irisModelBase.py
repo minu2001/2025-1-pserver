@@ -30,7 +30,7 @@ model_kn = joblib.load('model_kn.pkl')
 
 # 예측
 
-X_new = np.array([[1, 4.2, 1.4, 7]])
+X_new = np.array([[5.0, 3.4, 1.4, 0.2]])
 
 prediction = model_rfc.predict(X_new)
 print(f'RFC prediction={prediction}')
